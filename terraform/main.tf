@@ -245,6 +245,29 @@ resource "aws_iam_role_policy" "web_s3" {
   })
 }
 
+resource "aws_iam_role_policy" "web_ssm" {
+  name = "ssm-read"
+  role = aws_iam_role.web.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["ssm:GetParameter"]
+        Resource = "arn:aws:ssm:${var.region}:${data.aws_caller_identity.me.account_id}:parameter/2dv705/db_password"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["kms:Decrypt"]
+        Resource = "*"
+        Condition = {
+          StringEquals = { "kms:ViaService" = "ssm.${var.region}.amazonaws.com" }
+        }
+      }
+    ]
+  })
+}
+
 # "The web instance may read and write the bucket; your laptop may not."
 # An IAM policy can only GRANT. You are an administrator, so to keep even you
 # out, the bucket itself must DENY everyone except the web role. Deny beats
