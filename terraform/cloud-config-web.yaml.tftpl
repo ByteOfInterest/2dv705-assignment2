@@ -14,12 +14,15 @@ write_files:
     content: |
       DB_HOST=${db_host}
       DB_USER=lnu
-      DB_PASS=${db_pass}
       DB_NAME=lnunotes
       S3_BUCKET=${bucket}
       AWS_REGION=${region}
 
 runcmd:
+  - pip3 install --break-system-packages awscli
+  - |
+    export AWS_DEFAULT_REGION=${region}
+    echo "DB_PASS=$(/usr/local/bin/aws ssm get-parameter --name /2dv705/db_password --with-decryption --query Parameter.Value --output text)" >> /etc/lnu-notes.env
   - git clone ${repo} /opt/lnu-notes
   - python3 -m venv /opt/lnu-notes/.venv
   - /opt/lnu-notes/.venv/bin/pip install -r /opt/lnu-notes/requirements.txt

@@ -317,7 +317,6 @@ resource "aws_instance" "web" {
   user_data_replace_on_change = true
   user_data = templatefile("${path.module}/cloud-config-web.yaml.tftpl", {
     db_host = aws_instance.db.private_ip
-    db_pass = random_password.db.result
     bucket  = aws_s3_bucket.notes.id
     region  = var.region
     repo    = var.repo_url
