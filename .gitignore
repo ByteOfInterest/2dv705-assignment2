@@ -27,3 +27,8 @@ trust.json
 # Downloads and system files
 *.pkg
 .DS_Store
+terraform.tfstate*
+terraform.tfvars
+*.pem
+*.rendered
+.terraform/
