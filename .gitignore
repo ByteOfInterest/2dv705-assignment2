@@ -32,3 +32,5 @@ terraform.tfvars
 *.pem
 *.rendered
 .terraform/
+AWSCLIV2.pkg
+*.pkg
