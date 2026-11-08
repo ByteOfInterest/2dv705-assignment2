@@ -32,6 +32,13 @@ resource "random_password" "db" {
   special = false # letters and digits only: safe in SQL, YAML and env files
 }
 
+resource "aws_ssm_parameter" "db_password" {
+  name  = "/2dv705/db_password"
+  type  = "SecureString"
+  value = random_password.db.result
+}
+
+
 data "aws_availability_zones" "here" {
   state = "available"
 }
